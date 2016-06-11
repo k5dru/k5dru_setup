@@ -46,6 +46,13 @@ do_step sed -i.bak "s/^SELINUX=.*/SELINUX=permissive/" /etc/selinux/config
 do_step setenforce 0 
 sestatus
 do_step sed -i.bak "s!;date.timezone =!date.timezone = America/Chicago!" /etc/php.ini
+
+echo Going to reboot.  When it is back, point your browser at http://hugeserver/inventory/web/setup/
+echo and enter this value:
+cat /var/www/html/inventory/app/authkey.php 
+echo hit enter to reboot
+read y
+
 do_step --logfirst shutdown -r now
 
 
