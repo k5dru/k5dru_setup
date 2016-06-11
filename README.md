@@ -10,3 +10,8 @@ USE AT YOUR OWN RISK UNLESS YOU ARE ME.
 Current professional systems admins should have a better way of doing this. You can use these scripts as examples, or as-is if they fit your use case, with absolutely no warranty or support expressed or implied.
 
 NO WARRANTY OR SUPPORT.
+
+Todo:  
+  Centos7: using the Let's Encrypt project automatically https://letsencrypt.org/
+  F22: virtual machines 
+  
