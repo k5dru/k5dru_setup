@@ -55,4 +55,8 @@ read y
 
 do_step --logfirst shutdown -r now
 
-
+# TODO:  partkeepr says for me to set up a cron job, but it doesn't work as my user; who's crontab?
+#  Please remember to setup a cronjob:
+#   0 0,6,12,18 * * * /usr/bin/php <path-to-partkeepr>/app/console partkeepr:cron:run
+#  The cronjob should run at least every 12 hours. Remove any legacy PartKeepr cronjobs.
+# If possible, set your web server's document root to the web/ directory.
