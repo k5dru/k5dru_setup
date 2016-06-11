@@ -73,3 +73,4 @@ do_step patch /etc/httpd/conf.d/phpPgAdmin.conf <<!
 !
 do_step systemctl restart httpd.service
 
+echo done.  Try going to http://hugeserver/phpPgAdmin/ in your browser. 
