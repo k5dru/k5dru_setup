@@ -24,7 +24,7 @@ do_step ${YUM} install drpmsync
 do_step ${YUM} update
 
 # install fest 
-do_step ${YUM} install wget curl xauth xterm git readline-devel bzip2-libs bzip2-devel
+do_step ${YUM} install wget curl xauth xterm git readline-devel bzip2-libs bzip2-devel mlocate net-tools
 do_step ${YUM} groups mark convert
 do_step ${YUM} groupinstall "Development Tools"
 
@@ -34,10 +34,7 @@ do_step systemctl enable sshd.service
 do_step systemctl start sshd.service
 
 # install development tools 
-#  do_step ${YUM} install gcc kernel-headers kernel-devel lzop pigz
-
-# install basic tools
-do_step ${YUM} install mlocate net-tools
+do_step ${YUM} install gcc kernel-headers kernel-devel lzop pigz
 
 # add me to groups 
 do_step usermod  -a -G wheel $ADMIN_USER
