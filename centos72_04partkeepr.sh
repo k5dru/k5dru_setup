@@ -5,7 +5,7 @@
 ADMIN_USER=lemley   # your username. 
 HOSTNAME=hugeserver   # this hostname.
 YUM="yum -y"        # how to run yum.
-DELAY=1             # how long to delay before an action, hit control-c to break
+DELAY=0.2             # how long to delay before an action, hit control-c to break
 GLOBAL_PRETEND=N    # will do everything but actually run the step 
 # do_step --again 1  # will do a step again the first time; bump the number for
 #                    #   multiple agains. 
@@ -16,10 +16,14 @@ GLOBAL_PRETEND=N    # will do everything but actually run the step
 # LOCAL CONFIG 
 
 PARTKEEPR_VERSION=1.0.0
+echo enter a password to use for the PostgreSQL role "partkeepr"
+read PARTKEEPR_PASSWORD
+
 #### EXECUTION BEGINS #### 
 
 # install pear 
-do_step ${YUM} install php56w-pear php56w-pecl-imagick php56w-gd php56w-ldap
+do_step ${YUM} install php56w-pear php56w-pecl-imagick php56w-gd php56w-ldaa php56w-intl php56w-pecl-apcu
+
 do_step pear channel-discover pear.symfony.com
 do_step pear channel-discover pear.doctrine-project.org
 do_step pear channel-discover pear.twig-project.org
@@ -29,15 +33,29 @@ do_step pear install pear.doctrine-project.org/DoctrineSymfonyConsole
 do_step pear install twig/Twig
 
 #install partkeepr 
-if [ ! -e partkeepr-${PARTKEEPR_VERSION}.zip ]; then 
-	wget http://partkeepr.org/downloads/partkeepr-${PARTKEEPR_VERSION}.zip
+do_step mkdir -p /home/$ADMIN_USER/Downloads
+do_step chown $ADMIN_USER /home/$ADMIN_USER/Downloads
+
+if [ ! -e /home/$ADMIN_USER/Downloads/partkeepr-${PARTKEEPR_VERSION}.zip ]; then 
+do_step	wget http://partkeepr.org/downloads/partkeepr-${PARTKEEPR_VERSION}.zip \
+	-O /home/$ADMIN_USER/Downloads/partkeepr-${PARTKEEPR_VERSION}.zip 
 fi
-do_step unzip -d /var/www/ partkeepr-${PARTKEEPR_VERSION}.zip
+do_step unzip -d /var/www/ /home/$ADMIN_USER/Downloads/partkeepr-${PARTKEEPR_VERSION}.zip
 do_step rm -rf /var/www/inventory-old
 do_step mv /var/www/html/inventory /var/www/html/inventory-old
 do_step mv /var/www/partkeepr-${PARTKEEPR_VERSION} /var/www/html/inventory 
 do_step chown -R apache.apache /var/www/html/inventory
 do_step chmod -R 755 /var/www/html/inventory
+
+# create some DB users
+do_step su - postgres -c "createuser partkeepr"  
+# do_step su - postgres -c "createdb partkeepr"  
+do_step su - postgres -c psql <<!
+drop database partkeepr;
+create database partkeepr;
+alter user partkeepr with encrypted password '$PARTKEEPR_PASSWORD';
+grant all privileges on database partkeepr to partkeepr;
+!
 
 # turn off selinux -- this file, doesn't do anything: 
 do_step sed -i.bak "s/^SELINUX=.*/SELINUX=permissive/" /etc/sysconfig/selinux 
@@ -47,12 +65,11 @@ do_step setenforce 0
 sestatus
 do_step sed -i.bak "s!;date.timezone =!date.timezone = America/Chicago!" /etc/php.ini
 
-echo Going to reboot.  When it is back, point your browser at http://hugeserver/inventory/web/setup/
-echo and enter this value:
-cat /var/www/html/inventory/app/authkey.php 
-echo hit enter to reboot
-read y
+echo Going to reboot to enable selinux permissive mode.
+echo .  When it is back, point your browser at http://hugeserver/inventory/web/setup/
+echo and cat /var/www/html/inventory/app/authkey.php 
 
+do_step systemctl restart httpd.service
 do_step --logfirst shutdown -r now
 
 # TODO:  partkeepr says for me to set up a cron job, but it doesn't work as my user; who's crontab?
