@@ -2,16 +2,7 @@
 # The K5DRU Config Script for new Fedora 22 LXDE installations
 
 ####  CONFIG SECTION ####
-ADMIN_USER=lemley   # your username. 
-HOSTNAME=hugeserver   # this hostname.
-YUM="yum -y"        # how to run yum.
-DELAY=1             # how long to delay before an action, hit control-c to break
-GLOBAL_PRETEND=Y    # will do everything but actually run the step 
-# do_step --again 1  # will do a step again the first time; bump the number for
-#                    #   multiple agains. 
-# do_step --logfirst # will log the step as done, then do it. needed for reboot.
-# do_step --pretend # will pretend to do only this step
-. common.sh  # bring in definition of do_step
+. config.sh 
 
 #### EXECUTION BEGINS #### 
 
@@ -95,7 +86,6 @@ do_step patch /etc/httpd/conf/httpd.conf <<!
 
 # allow lemley@dadputer to login without a password
 # JUST STOP HERE 
-exit 
 
 # ONLY DO THIS IF YOU ARE ME. 
 do_step su - root -c "ssh-keygen"
@@ -105,5 +95,4 @@ do_step chmod 700 /root/.ssh/authorized_keys
 do_step cp /root/.ssh/authorized_keys /home/$ADMIN_USER/.ssh/authorized_keys
 do_step chown $ADMIN_USER /home/$ADMIN_USER/.ssh/authorized_keys
 do_step chmod 700 /home/$ADMIN_USER/.ssh/authorized_keys
-
 

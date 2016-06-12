@@ -2,16 +2,7 @@
 # The K5DRU Config Script for new Fedora 22 LXDE installations
 
 ####  CONFIG SECTION ####
-ADMIN_USER=lemley   # your username. 
-HOSTNAME=hugeserver   # this hostname.
-YUM="yum -y"        # how to run yum.
-DELAY=0.2             # how long to delay before an action, hit control-c to break
-GLOBAL_PRETEND=N    # will do everything but actually run the step 
-# do_step --again 1  # will do a step again the first time; bump the number for
-#                    #   multiple agains. 
-# do_step --logfirst # will log the step as done, then do it. needed for reboot.
-# do_step --pretend # will pretend to do only this step
-. common.sh  # bring in definition of do_step
+. config.sh 
 
 # LOCAL CONFIG 
 
@@ -22,7 +13,7 @@ read PARTKEEPR_PASSWORD
 #### EXECUTION BEGINS #### 
 
 # install pear 
-do_step ${YUM} install php56w-pear php56w-pecl-imagick php56w-gd php56w-ldaa php56w-intl php56w-pecl-apcu
+do_step ${YUM} install php56w-pear php56w-pecl-imagick php56w-gd php56w-ldaa php56w-intl php56w-pecl-apcu php56w-ldap
 
 do_step pear channel-discover pear.symfony.com
 do_step pear channel-discover pear.doctrine-project.org
