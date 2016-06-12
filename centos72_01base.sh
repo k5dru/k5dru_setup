@@ -34,7 +34,10 @@ do_step systemctl enable sshd.service
 do_step systemctl start sshd.service
 
 # install development tools 
-do_step ${YUM} install gcc kernel-headers kernel-devel lzop pigz
+#  do_step ${YUM} install gcc kernel-headers kernel-devel lzop pigz
+
+# install basic tools
+do_step ${YUM} install mlocate net-tools
 
 # add me to groups 
 do_step usermod  -a -G wheel $ADMIN_USER
