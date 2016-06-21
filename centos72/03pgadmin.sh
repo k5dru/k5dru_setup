@@ -41,9 +41,10 @@ do_step ${YUM} install phpPgAdmin
 
 do_step sed -i.bak "s/.'host'. = ''/['host'] = 'localhost'/" /etc/phpPgAdmin/config.inc.php
 
-# fix export issue: -i is now missing from pg_dump:
+# fix export issue: -i is now unsupported in  pg_dump.
+# fix RLS issue: --enable-row-security is required to dump tables with row-security as non-owner.
 grep '$cmd = $exe . " -i";' /usr/share/phpPgAdmin/dbexport.php && 
-do_step  sed -i.bak 's/ \. " -i";/;/' /usr/share/phpPgAdmin/dbexport.php 
+do_step  sed -i.bak 's/ \. " -i";/ . " --enable-row-security";/' /usr/share/phpPgAdmin/dbexport.php 
 
 # allow innernet logins: 
 do_step patch /etc/httpd/conf.d/phpPgAdmin.conf <<!

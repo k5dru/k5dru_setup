@@ -54,6 +54,7 @@ do_step su - postgres -c psql <<!
 alter user postgres with encrypted password '$PGPASSWORD';
 create extension adminpack;
 alter user $ADMIN_USER with encrypted password '$ADMINPASSWORD';
+alter role $ADMIN_USER with superuser createrole ;
 grant all privileges on database $ADMIN_USER to $ADMIN_USER;
 !
 
