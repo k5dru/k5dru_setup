@@ -1,6 +1,7 @@
 ####  CONFIG SECTION ####
 ADMIN_USER=lemley   # your username. 
 HOSTNAME=giveto.us.to   # this hostname.
+DOMAIN=giveto.us.to   #  this internet domain.
 YUM="yum -y"        # how to run yum.
 DELAY=1             # how long to delay before an action, hit control-c to break
 GLOBAL_PRETEND=N    # will do everything but actually run the step 
