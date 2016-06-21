@@ -15,17 +15,18 @@ do_step ${YUM} install drpmsync
 do_step ${YUM} update
 
 # install fest 
-do_step ${YUM} install wget curl xauth xterm git readline-devel bzip2-libs bzip2-devel
-do_step ${YUM} groups mark convert
-do_step ${YUM} groupinstall "Development Tools"
+do_step ${YUM} install wget curl xauth xterm git readline-devel bzip2-libs bzip2-devel mlocate
+
+# install development tools 
+# WHY??
+#do_step ${YUM} groups mark convert
+#do_step ${YUM} groupinstall "Development Tools"
+#do_step ${YUM} install gcc kernel-headers kernel-devel lzop pigz
 
 # enable to login from remote
 do_step ${YUM} install openssh-server  
 do_step systemctl enable sshd.service
 do_step systemctl start sshd.service
-
-# install development tools 
-do_step ${YUM} install gcc kernel-headers kernel-devel lzop pigz
 
 # add me to groups 
 do_step usermod  -a -G wheel $ADMIN_USER
@@ -84,12 +85,14 @@ do_step patch /etc/httpd/conf/httpd.conf <<!
  #
 !
 
-# allow lemley@dadputer to login without a password
-# JUST STOP HERE 
-
-# ONLY DO THIS IF YOU ARE ME. 
 do_step su - root -c "ssh-keygen"
 do_step su - $ADMIN_USER -c "ssh-keygen"
+
+# JUST STOP HERE 
+exit 
+
+# ONLY DO THIS IF YOU ARE ME. 
+# allow lemley@dadputer to login without a password
 do_step scp lemley@dadputer:.ssh/id_rsa.pub /root/.ssh/authorized_keys
 do_step chmod 700 /root/.ssh/authorized_keys
 do_step cp /root/.ssh/authorized_keys /home/$ADMIN_USER/.ssh/authorized_keys

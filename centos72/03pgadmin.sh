@@ -32,7 +32,7 @@ do_step patch /etc/php.ini <<!
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ; Error handling and logging ;
 !
-
+ 
 do_step chcon -R -t httpd_sys_content_rw_t /var/www/html
 do_step setsebool -P httpd_can_network_connect_db on
 
@@ -41,6 +41,11 @@ do_step ${YUM} install phpPgAdmin
 
 do_step sed -i.bak "s/.'host'. = ''/['host'] = 'localhost'/" /etc/phpPgAdmin/config.inc.php
 
+# fix export issue: -i is now missing from pg_dump:
+grep '$cmd = $exe . " -i";' /usr/share/phpPgAdmin/dbexport.php && 
+do_step  sed -i.bak 's/ \. " -i";/;/' /usr/share/phpPgAdmin/dbexport.php 
+
+# allow innernet logins: 
 do_step patch /etc/httpd/conf.d/phpPgAdmin.conf <<!
 --- /etc/httpd/conf.d/phpPgAdmin.conf.bak	2016-01-05 16:32:59.633274037 -0600
 +++ /etc/httpd/conf.d/phpPgAdmin.conf	2016-01-05 16:41:17.738046870 -0600
@@ -64,4 +69,4 @@ do_step patch /etc/httpd/conf.d/phpPgAdmin.conf <<!
 !
 do_step systemctl restart httpd.service
 
-echo done.  Try going to http://hugeserver/phpPgAdmin/ in your browser. 
+echo done.  Try going to http://$DOMAIN/phpPgAdmin/ in your browser. 
