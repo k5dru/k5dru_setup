@@ -5,10 +5,13 @@
 . config.sh
 
 #### LOCAL CONFIG 
-echo -n enter desired postgres user database password :
+#WEB_DATABASE=webdb
+#WEB_DATABASE_USER=webdb_owner 
+
+echo -n enter desired postgres user database password (make it hard):
 read PGPASSWORD  
-echo -n enter desired $ADMIN_USER database password :
-read ADMINPASSWORD
+#echo -n enter desired $WEB_DATABASE_USER database password (make it hard):
+#read WEB_DATABASE_USER_PASSWORD
 PGVERSION=9.5
 PGSHORTVERSION=95
 PGDG=http://yum.postgresql.org/${PGVERSION}/redhat/rhel-7-x86_64/pgdg-centos${PGSHORTVERSION}-${PGVERSION}-2.noarch.rpm
@@ -48,15 +51,19 @@ do_step systemctl start postgresql-${PGVERSION}
 # do_step systemctl restart postgresql-${PGVERSION}
 
 # configure some database users, etc. 
-do_step su - postgres -c "createuser $ADMIN_USER"  
-do_step su - postgres -c "createdb $ADMIN_USER"  
+#do_step su - postgres -c "createuser $WEB_DATABASE_USER"  
+#do_step su - postgres -c "createdb $WEB_DATABASE"  
 do_step su - postgres -c psql <<!
 alter user postgres with encrypted password '$PGPASSWORD';
 create extension adminpack;
-alter user $ADMIN_USER with encrypted password '$ADMINPASSWORD';
-alter role $ADMIN_USER with superuser createrole ;
-grant all privileges on database $ADMIN_USER to $ADMIN_USER;
+/*
+ * alter user $WEB_DATABASE_USER with encrypted password '$WEB_DATABASE_USER_PASSWORD';
+ * alter role $WEB_DATABASE_USER with superuser createrole ;
+ * grant all privileges on database $WEB_DATABASE to $WEB_DATABASE_USER;
+ */
 !
+
+if [ 'HELL' = 'FROZEN' ]; then
 
 # do this ONLY if you REALLY want REMOTE connections to the DB MACHINE!
 do_step firewall-cmd --permanent --add-port=5432/tcp
@@ -67,3 +74,4 @@ do_step sed -i.bak "s/#listen_addresses = 'localhost'/listen_addresses = '*'/" /
 do_step --again 2 systemctl restart postgresql-${PGVERSION}
 # end of remote port hole poking
 
+fi

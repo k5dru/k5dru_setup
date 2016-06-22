@@ -8,7 +8,9 @@
 
 # fixup sudoers for no password operation by admins 
 do_step sed -iOLD 's/\(^#.\)\(%wheel.*NOPASSWD.*\)/\2/' /etc/sudoers
-do_step sed -iOLD "s/localhost.localdomain/$HOSTNAME/" /etc/hostname
+
+#do_step fixme sed -iOLD "s/localhost.localdomain/$HOSTNAME/" /etc/hostname
+do_step hostnamectl set-hostname $HOSTNAME
 
 # enable delta RPMs, and update installation
 do_step ${YUM} install drpmsync
