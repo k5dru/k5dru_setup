@@ -24,6 +24,7 @@ echo 'consider renewing automatically per https://certbot.eff.org/#centosrhel7-a
 
 do_step sed -iOLD 's!\(SSLCertificateFile \).*!\1/etc/letsencrypt/live/'$DOMAIN'/cert.pem!;
 s!\(SSLCertificateKeyFile \).*!\1/etc/letsencrypt/live/'$DOMAIN'/privkey.pem!;
+s!.*\(SSLCertificateChainFile \).*!\1/etc/letsencrypt/live/'$DOMAIN'/chain.pem!;
 ' /etc/httpd/conf.d/ssl.conf
 
 do_step bash -c 'cat >> /etc/httpd/conf.d/ssl.conf' <<!
@@ -34,5 +35,5 @@ NameVirtualHost *:80
 </VirtualHost>
 !
 
-do_step systemctl restart httpd.service
+do_step --again 3 systemctl restart httpd.service
 

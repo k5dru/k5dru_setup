@@ -40,11 +40,11 @@ do_step patch /var/www/html/index.html <<!
  	<div id="Header">
  	<div class="wrapper">
 -		<div class="logo"><h1><img src="images/logo1.png" />MATRIX</h1>	</div>
-+		<div class="logo"><h1><img src="images/2011-03-12-give-me-your-data.jpg" />ODAMMIT</h1>	</div>
++		<div class="logo"><h1><img src="images/logo1.png" />M<sup>2</sup>D<sup>2</sup></h1>	</div>
  		</div>
  	</div>
 -	<h2>We are coming soon!!!</h2> 	
-+	<h2>Operational Data and Maintenance Manager Information Tool</h2> 	
++	<h2>Maintenance Manager Data Depot (version next!)</h2> 	
 +<center><h4><a href="phpPgAdmin">&gt; admin console &lt;</a></h4></center>
  <div class="countdown styled"></div>
  </div>

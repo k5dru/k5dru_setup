@@ -12,12 +12,24 @@ do_step sed -iOLD 's/\(^#.\)\(%wheel.*NOPASSWD.*\)/\2/' /etc/sudoers
 #do_step fixme sed -iOLD "s/localhost.localdomain/$HOSTNAME/" /etc/hostname
 do_step hostnamectl set-hostname $HOSTNAME
 
+do_step bash -c 'cat >> /etc/hosts' <<!
+$THIS_IP $HOSTNAME $DOMAIN
+!
+
+#FIXME:  may need to reboot here if on linode; network config gets hosed.  
+
 # enable delta RPMs, and update installation
 do_step ${YUM} install drpmsync
 do_step ${YUM} update
 
 # install fest 
-do_step ${YUM} install wget curl xauth xterm git readline-devel bzip2-libs bzip2-devel mlocate
+do_step ${YUM} install wget curl xauth xterm git readline-devel bzip2-libs bzip2-devel mlocate patch
+
+
+# enable firewalld if it isn't already 
+do_step systemctl enable firewalld
+do_step systemctl start firewalld
+
 
 # install development tools 
 # WHY??
@@ -100,4 +112,5 @@ do_step chmod 700 /root/.ssh/authorized_keys
 do_step cp /root/.ssh/authorized_keys /home/$ADMIN_USER/.ssh/authorized_keys
 do_step chown $ADMIN_USER /home/$ADMIN_USER/.ssh/authorized_keys
 do_step chmod 700 /home/$ADMIN_USER/.ssh/authorized_keys
+
 
