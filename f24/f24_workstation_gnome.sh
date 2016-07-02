@@ -184,8 +184,8 @@ do_step usermod  -a -G audio $ADMIN_USER
 do_step usermod  -a -G jackuser $ADMIN_USER
 
 # install freedv from Hobbes repo
-do_step curl https://copr.fedoraproject.org/coprs/hobbes1069/FreeDV/repo/fedora-22/hobbes1069-FreeDV-fedora-22.repo -o /etc/yum.repos.d/hobbes1069-FreeDV-fedora-22.repo 
-do_step ${YUM} install freedv
+#do_step curl https://copr.fedoraproject.org/coprs/hobbes1069/FreeDV/repo/fedora-22/hobbes1069-FreeDV-fedora-22.repo -o /etc/yum.repos.d/hobbes1069-FreeDV-fedora-22.repo 
+do_step ${YUM} install freedv pavucontrol 
 
 exit
 
