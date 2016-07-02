@@ -17,6 +17,7 @@ GLOBAL_PRETEND=N    # will do everything but actually run the step
 
 # fixup sudoers for no password operation by admins 
 do_step sed -iOLD 's/\(^#.\)\(%wheel.*NOPASSWD.*\)/\2/' /etc/sudoers
+do_step usermod -a -G wheel $ADMIN_USER
  
 # set my hostname
 # done in install: do_step sed -iOLD "s/localhost.localdomain/$HOSTNAME/" /etc/hostname
@@ -45,7 +46,8 @@ do_step ${YUM} install gstreamer rhythmbox gstreamer-plugins-good gstreamer-plug
 # do_step ${YUM} install alsa-lib.i686 libXv.i686 libXScrnSaver.i686 qt.i686 qt-x11.i686  
 
 #continue installfest
-do_step ${YUM} install xine-lib xine-lib-extras-freeworld avidemux 
+do_step ${YUM} install xine-lib xine-lib-extras-freeworld 
+# missing; avidemux 
 
 #Q: why was I tryhing to install uvcdynctrlx ?
 #A: for a webcam.
@@ -94,7 +96,8 @@ fi
 
 
 # these only work after enabling RPMFUSION 
-do_step ${YUM} install vlc audacious-plugins-freeworld-mp3 unrar mame stella gltron 
+do_step ${YUM} install vlc audacious-plugins-freeworld-mp3 unrar stella gltron 
+# mame is missing in F24 
 
 # install google chrome
 do_step bash -c "cat > /etc/yum.repos.d/google-chrome.repo"  <<!
