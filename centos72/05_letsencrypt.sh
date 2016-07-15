@@ -22,9 +22,12 @@ echo 'consider renewing automatically per https://certbot.eff.org/#centosrhel7-a
 #   you've both a RSA and a DSA private key you can configure
 #   both in parallel (to also allow the use of DSA ciphers, etc.)
 
+# point to new certs, and also disable SSLv3
+
 do_step sed -iOLD 's!\(SSLCertificateFile \).*!\1/etc/letsencrypt/live/'$DOMAIN'/cert.pem!;
 s!\(SSLCertificateKeyFile \).*!\1/etc/letsencrypt/live/'$DOMAIN'/privkey.pem!;
 s!.*\(SSLCertificateChainFile \).*!\1/etc/letsencrypt/live/'$DOMAIN'/chain.pem!;
+s!SSLProtocol all -SSLv2.*!SSLProtocol all -SSLv2 -SSLv3!;
 ' /etc/httpd/conf.d/ssl.conf
 
 do_step bash -c 'cat >> /etc/httpd/conf.d/ssl.conf' <<!

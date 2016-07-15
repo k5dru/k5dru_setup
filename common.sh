@@ -17,6 +17,10 @@ die()
 #. "$CONFIG"
 
 LOGFILE="$(dirname $0)/$(basename $0).log"
+if [ $(echo "$LOGFILE" | cut -b 1 ) != "/" ]; then 
+	LOGFILE="$PWD/$LOGFILE"
+fi
+
 echo LOGFILE is "$LOGFILE"
 
 if [ $(whoami) != "root" ]; then 

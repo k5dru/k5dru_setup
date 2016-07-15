@@ -10,20 +10,21 @@
 do_step sed -iOLD 's/\(^#.\)\(%wheel.*NOPASSWD.*\)/\2/' /etc/sudoers
 
 #do_step fixme sed -iOLD "s/localhost.localdomain/$HOSTNAME/" /etc/hostname
-do_step hostnamectl set-hostname $HOSTNAME
+do_step --again 1 hostnamectl set-hostname $HOSTNAME
 
 do_step bash -c 'cat >> /etc/hosts' <<!
 $THIS_IP $HOSTNAME $DOMAIN
 !
 
 #FIXME:  may need to reboot here if on linode; network config gets hosed.  
+do_step --logfirst reboot
 
 # enable delta RPMs, and update installation
 do_step ${YUM} install drpmsync
 do_step ${YUM} update
 
 # install fest 
-do_step ${YUM} install wget curl xauth xterm git readline-devel bzip2-libs bzip2-devel mlocate patch
+do_step ${YUM} install wget curl xauth xterm git readline-devel bzip2-libs bzip2-devel mlocate patch zip unzip 
 
 
 # enable firewalld if it isn't already 
