@@ -31,9 +31,15 @@ do_step chmod -R u+w /$SITEROOT/$SITE/bootstrap/cache
 # By default this application is only accessible from the local host.
 #
 
-# copied from config of phpPgAdmin:
+# copied from config of phpPgAdmin, modified for Laravel:
 do_step --again 1 bash -c "cat > /etc/httpd/conf.d/${SITE}.conf" <<!
 Alias /$SITE $SITEROOT/$SITE/public
+
+# allow rewrite module to do its thing, for laravel: 
+<Directory $SITEROOT/$SITE/public >
+Allowoverride All
+</Directory>
+
 <Location /$SITE>
     <IfModule mod_authz_core.c>
         # Apache 2.4
@@ -52,7 +58,23 @@ Alias /$SITE $SITEROOT/$SITE/public
 </Location>
 !
 
-systemctl restart httpd.service
+# IF using a HTTP alias as above, reset "siteroot" per 
+# http://stackoverflow.com/questions/16897504/laravel-quick-start-guide-route-not-working : 
+
+do_step patch $SITEROOT/$SITE/public/.htaccess <<!
+--- /var/www/cars/public/.htaccess.old	2016-07-19 15:05:36.557000000 -0500
++++ /var/www/cars/public/.htaccess	2016-07-19 15:06:19.507000000 -0500
+@@ -4,6 +4,7 @@
+     </IfModule>
+ 
+     RewriteEngine On
++    RewriteBase /$SITE/
+ 
+     # Redirect Trailing Slashes If Not A Folder...
+     RewriteCond %{REQUEST_FILENAME} !-d
+!
+
+do_step --again 1 systemctl restart httpd.service
 
 echo done. 
 echo Actual site is in $SITEROOT/$SITE
@@ -77,8 +99,14 @@ create user $DB_USERNAME with encrypted password '$DB_PASSWORD';
 grant all privileges on database $SITE to $DB_USERNAME;
 !
 
-(
+# start building the site: 
 cd $SITEROOT/$SITE 
-do_step --again 1 php artisan migrate
-)
 
+# enable logins, per https://laracasts.com/series/laravel-5-from-scratch 
+do_step php artisan make:auth
+do_step --again 1 php artisan migrate
+do_step --again 2 chown apache: -R .
+do_step --again 2 chcon -R -t httpd_sys_content_rw_t .
+do_step --again 2 systemctl restart httpd.service
+
+echo "consider alias vir='vi $SITEROOT/$SITE/app/Http/routes.php'"
