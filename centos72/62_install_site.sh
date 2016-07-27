@@ -8,7 +8,7 @@
 . config.sh 
 
 # LOCAL CONFIG 
-SITE=cars
+SITE=data
 SITEROOT=/var/www  
 DB_USERNAME=${SITE}_admin
 echo -n Enter password for database user $DB_USERNAME:
@@ -92,12 +92,13 @@ do_step sed -i.bak "s!DB_PASSWORD=secret!DB_PASSWORD=$DB_PASSWORD!;" $SITEROOT/$
 
 # create a database, and grant all privs to our manually-created user.  
 # TODO:  automatically create this user. 
-do_step su - postgres -c "dropdb $SITE"  
 do_step su - postgres -c "createdb $SITE"  
 do_step --again 3 su - postgres -c psql $SITE <<!
 create user $DB_USERNAME with encrypted password '$DB_PASSWORD';
 grant all privileges on database $SITE to $DB_USERNAME;
 !
+
+exit 
 
 # start building the site: 
 cd $SITEROOT/$SITE 
