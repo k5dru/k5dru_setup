@@ -11,7 +11,20 @@ Current professional systems admins should have a better way of doing this. You 
 
 NO WARRANTY OR SUPPORT.
 
-Todo:  
-  Centos7: using the Let's Encrypt project automatically https://letsencrypt.org/
-  F22: virtual machines 
-  
+Quickstart: 
+install Centos 7 and run:
+```
+yum -y update
+yum -y install git 
+git clone https://github.com/k5dru/k5dru_setup/
+cd k5dru_setup/centos72
+vi config.sh 
+```
+Then start running the config scripts you want in order. 
+
+If you run the script again, the previously completed steps will not be run unless you edit the script.sh.log file and remove that entry, or modify the do_step comand with the --again $something modifier. 
+
+
+
+
+
