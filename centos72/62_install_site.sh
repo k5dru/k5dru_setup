@@ -8,7 +8,7 @@
 . config.sh 
 
 # LOCAL CONFIG 
-SITE=data
+SITE=m2d2
 SITEROOT=/var/www  
 DB_USERNAME=${SITE}_admin
 echo -n Enter password for database user $DB_USERNAME:

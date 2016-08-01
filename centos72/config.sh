@@ -1,7 +1,7 @@
 ####  CONFIG SECTION ####
-ADMIN_USER=m2d2   # your username. 
-THIS_IP=192.168.122.251
-HOSTNAME=m2d2 # this hostname.
+ADMIN_USER=jal0906   # your username. 
+THIS_IP=10.0.2.15
+HOSTNAME=sppdev0 # this hostname.
 DOMAIN=localdomain  #  this internet domain.
 YUM="yum -y"        # how to run yum.
 DELAY=1             # how long to delay before an action, hit control-c to break
