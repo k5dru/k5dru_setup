@@ -1,6 +1,0 @@
-20171104-032012|7b43223ed844cdccd79914323fbeb860|apt-get install firewalld|
-20171104-032013|353bbfb3a556502dc49785f647c4f597|apt-get install openssh-server|
-20171104-032014|50d61c99298bb41e652da3c70a153334|firewall-cmd --permanent --add-source=64.250.38.207 --zone=trusted|
-20171104-032015|4215ca369f614fef8692cb2cc8cf3c28|firewall-cmd --permanent --add-service=ssh --zone trusted|
-20171104-032016|41adc84a3f980a5c9a5954d470974c21|firewall-cmd --permanent --remove-service=ssh --zone=public|
-20171104-032017|5277c902b1cdc3c16b1b0a4eaa887c9b|firewall-cmd --reload|
