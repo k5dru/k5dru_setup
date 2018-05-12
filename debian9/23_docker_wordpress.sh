@@ -43,7 +43,7 @@ do_step rm -f /etc/nginx/sites-available/default
 do_step rm -f /etc/nginx/sites-enabled/default
 do_step systemctl restart nginx
 
-
+do_step firewall-cmd --permanent --add-port=80/tcp --zone=public
 # manual restore of old wordpress site backup:
 # save off the new html/wp-config.php
 # on server: cp wordpress/html/wp_config.php ~/wp-config.php.bak
