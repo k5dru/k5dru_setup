@@ -1,3 +1,8 @@
+
+# edit to add: I'm following this script, kind of: 
+# https://ahmedmusaad.com/self-host-pixelfed/
+# on a new Ubuntu 22.04 LTS virtual server on Linode.  
+
 # I ran this as root before even the git clone as my user
 
 apt -y update 
